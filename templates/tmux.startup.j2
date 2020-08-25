@@ -1,6 +1,5 @@
 {{ ansible_managed | comment }}
 
-{% if Location == "work" %}
 tmux has-session -t mystuff
 if [ $? != 0 ]
 then
@@ -16,4 +15,3 @@ then
    tmux send-keys -t mystuff:3.2 'export KRB5CCNAME=/tmp/krb5cc_56827_SCARD ; scard ; bin/parse.pl' 
 fi
 #tmux attach -t mystuff
-{%endif%}
