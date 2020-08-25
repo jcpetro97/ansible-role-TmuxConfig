@@ -1,0 +1,26 @@
+---
+- name: Install tmux package if it isn't installed 
+  package:
+    name: "tmux"
+
+- name: copy tmux config to home directory
+  template:
+    src:  tmux.conf.j2
+    dest: /home/{{item.UserName}}/.tmux.conf
+    owner:  "{{item.UserName}}"
+    group:  "{{item.PrimaryGroup| default('users')}}"
+    backup: no
+    mode: 0644
+  with_items: "{{TmuxInfo}}"
+
+- name: copy tmux startup to home directory
+  template:
+    src:  tmux.startup.j2
+    dest: /home/{{item.UserName}}/.tmux.startup
+    owner:  "{{item.UserName}}"
+    group:  "{{item.PrimaryGroup| default('users')}}"
+    backup: no
+    mode: 0755
+  with_items: "{{TmuxInfo}}"
+  when: 
+    - Location == "work"

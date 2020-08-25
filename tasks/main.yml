@@ -1,38 +1,8 @@
 ---
-- name: Check if user {{UserName}} exists
-  action: shell /usr/bin/getent passwd {{UserName}} | /usr/bin/wc -l | tr -d ' '
-  register: user_exist
+- name: Install and configure tmux on a Redhat based system
+  include: RedHat.yml
+  when: ansible_distribution == "CentOS" or ansible_distribution == "RedHat" 
 
-- name: Get primary group for {{UserName}}
-  shell: /usr/bin/id -gn "{{UserName}}"
-  register: PrimaryGroup
-  when: user_exist.stdout != "0"
-
-- name: Install tmux package if it isn't installed 
-  apt:  name="tmux" update_cache=yes
-
-- name: copy tmux config to home directory
-  template:
-    src:  tmux.conf.j2
-    dest: /home/{{UserName}}/.tmux.conf
-    owner:  "{{UserName}}"
-    group:  "{{ PrimaryGroup.stdout }}"
-    backup: no
-    mode: 0644
-  when: 
-    - UserName is defined
-    - user_exist.stdout != "0"
-
-- name: copy tmux startup to home directory
-  template:
-    src:  tmux.startup.j2
-    dest: /home/{{UserName}}/.tmux.startup
-    owner:  "{{UserName}}"
-    group:  "{{ PrimaryGroup.stdout }}"
-    backup: no
-    mode: 0755
-  when: 
-    - UserName is defined
-    - Location == "work"
-    - TmuxStartup == "yes"
-    - user_exist.stdout != "0"
+- name: Install and configure tmux on a Debian based system
+  include: Debian.yml
+  when: ansible_distribution == "Ubuntu" or ansible_distribution == "Debian" 
