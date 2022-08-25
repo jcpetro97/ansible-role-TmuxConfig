@@ -1,9 +1,9 @@
 ---
-- name: Install tmux package if it isn't installed 
+- name: RedHat - Install tmux package if it isn't installed 
   package:
     name: "tmux"
 
-- name: copy tmux config to home directory
+- name: RedHat - copy tmux config to home directory
   template:
     src:  tmux.conf.j2
     dest: /home/{{item.UserName}}/.tmux.conf
@@ -13,9 +13,9 @@
     mode: 0644
   with_items: "{{TmuxInfo}}"
 
-- name: copy tmux startup to home directory
+- name: RedHat - copy tmux startup to home directory for work
   template:
-    src:  tmux.startup.j2
+    src:  tmux.startup.work.j2
     dest: /home/{{item.UserName}}/.tmux.startup
     owner:  "{{item.UserName}}"
     group:  "{{item.PrimaryGroup| default('users')}}"
@@ -23,4 +23,17 @@
     mode: 0755
   with_items: "{{TmuxInfo}}"
   when: 
-    - Location == "work"
+    - ( item.UserName == "jxpsys" ) and ( item.TmuxStartup | default('no') == 'yes')
+
+- name: RedHat - copy tmux startup to home directory for home
+  template:
+    src:  tmux.startup.home.j2
+    dest: /home/{{item.UserName}}/.tmux.startup
+    owner:  "{{item.UserName}}"
+    group:  "{{item.PrimaryGroup| default('users')}}"
+    backup: no
+    mode: 0755
+  with_items: "{{TmuxInfo}}"
+  when: 
+    - ( item.UserName != "jxpsys" ) and ( item.TmuxStartup | default('no') == 'yes')
+
