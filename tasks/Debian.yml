@@ -25,7 +25,7 @@
     mode: 0755
   with_items: "{{TmuxInfo}}"
   when: 
-    - ( item.UserName == "jxpsys" ) and ( TmuxStartup| default('no') == 'yes')
+    - ( item.UserName == "jxpsys" ) and ( TmuxStartup == 'yes')
 
 - name: Ubuntu - copy tmux startup to home directory for home
   template:
@@ -37,4 +37,4 @@
     mode: 0755
   with_items: "{{TmuxInfo}}"
   when: 
-    - ( item.UserName != "jxpsys" ) and ( TmuxStartup| default('no') == 'yes')
+    - ( item.UserName != "jxpsys" ) and ( TmuxStartup == 'yes')
