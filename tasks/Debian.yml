@@ -37,4 +37,4 @@
     mode: 0755
   with_items: "{{TmuxInfo}}"
   when: 
-    - ( item.UserName != "jxpsys" ) and ( TmuxStartup == 'yes')
+    - ( item.UserName != "jxpsys" ) and ( TmuxStartup == "yes" )
