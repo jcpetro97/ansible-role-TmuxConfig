@@ -1,11 +1,11 @@
 ---
-- name: Ubuntu - Install tmux package if it isn't installed 
+- name: Ubuntu/Debian - Install tmux package if it isn't installed 
   apt:
     name: "tmux"
     update_cache: "yes"
     cache_valid_time: 600
 
-- name: Ubuntu - copy tmux config to home directory
+- name: Ubuntu/Debian - copy tmux config to home directory
   template:
     src:  tmux.conf.j2
     dest: /home/{{item.UserName}}/.tmux.conf
@@ -15,7 +15,7 @@
     mode: 0644
   with_items: "{{TmuxInfo}}"
 
-- name: Ubuntu - copy tmux startup to home directory for work
+- name: Ubuntu/Debian - copy tmux startup to home directory for work
   template:
     src:  tmux.startup.work.j2
     dest: /home/{{item.UserName}}/.tmux.startup
@@ -27,7 +27,7 @@
   when: 
     - ( item.UserName == "jxpsys" ) and ( item.TmuxStartup | default('no') == 'yes')
 
-- name: Ubuntu - copy tmux startup to home directory for home
+- name: Ubuntu/Debian - copy tmux startup to home directory for home
   template:
     src:  tmux.startup.home.j2
     dest: /home/{{item.UserName}}/.tmux.startup
